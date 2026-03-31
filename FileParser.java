@@ -27,10 +27,6 @@ public class FileParser {
                 }
             }
             scanner.close();
-            
-            if (this.items.size() > 0) {
-                System.out.println("DEBUG: Loaded " + items.size() + " items for " + file.getName());
-            }
         } catch (Exception e) {
             System.out.println("ERROR: Could not read " + filename);
             this.items = new ArrayList<>();

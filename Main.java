@@ -4,6 +4,19 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * COS314 Artificial Intelligence - Assignment 2
+ * ---------------------------------------------------------
+ * UNIVERSAL Main Entry Point for the Knapsack Comparison.
+ *
+ * This class serves as the controller for the experimental
+ * evaluation of Metaheuristic algorithms (GA and ILS).
+ * It handles dynamic file I/O, natural sorting of instances,
+ * and formatted tabular output for comparative analysis.
+ *
+ * Team: Nthabiseng & Allen
+ **/
+
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -48,9 +61,20 @@ public class Main {
 
             // Run Nthabiseng's GA logic
             if (mode == 1 || mode == 3) {
-                // Here we call her class
-                GeneticAlgorithm ga = new GeneticAlgorithm(seed);
-                ga.executeGA(fileName, opt);
+                // Prepare the data for the GA
+                FileParser parser = new FileParser();
+                parser.loadFile(filePath);
+                ProblemInstance instance = new ProblemInstance(parser.items, parser.capacity);
+
+                // Start and run the GA
+                GeneticAlgorithm ga = new GeneticAlgorithm(instance, seed);
+
+                long start = System.nanoTime();
+                double result = ga.solve();
+                double runtime = (System.nanoTime() - start) / 1_000_000_000.0;
+
+                System.out.printf("%-25s | %-10s | %-15d | %-15.4f | %-15.4f | %-15.6f\n",
+                        fileName, "GA", seed, result, opt, runtime);
             }
 
             // Run Allen's ILS logic
