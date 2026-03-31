@@ -1,0 +1,3 @@
+# AI Heuristic SearchComparison
+The purpose of this assignment is to compare the effectiveness of a population-based meta-heuristic (Genetic Algorithm) and a trajectory-based meta-heuristic (Iterated Local Search) to solve the provided problem instances. For the provided problem instances, a GA and an Iterated Local Search algorithm are to be developed to solve the given instances. The results are to be presented in the format of the table provided below. 
+x
