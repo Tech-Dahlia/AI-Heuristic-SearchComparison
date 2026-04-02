@@ -21,7 +21,7 @@ public class IteratedLocalSearchAlgorithm {
         this.random = new Random(seed);
     }
 
-    //file loading
+    // File loading
     public void loadInstance(String fileName) {
         FileParser parser = new FileParser();
         parser.loadFile(fileName);
@@ -134,10 +134,6 @@ public class IteratedLocalSearchAlgorithm {
                 sStar = sPrimeStar;
             }
         }
-
-        //see the array
-        //System.out.println("Items selected: " + Arrays.toString(sStar));
-
         return sStar;
     }
 

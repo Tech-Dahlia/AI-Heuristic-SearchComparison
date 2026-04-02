@@ -3,9 +3,17 @@ import java.util.Random;
 
 public class GeneticAlgorithm {
     private ProblemInstance instance;
+
+    // Total individuals in the 'system'
     private int populationSize = 100;
+
+    // Convergence limit
     private int generations = 1000;
+
+    // Probability of stochastic genetic drift (0.10 = 10%)
     private double mutationRate = 0.10;
+
+    // Selective pressure intensity
     private int tournamentSize = 5;
     private Random rand;
 
@@ -14,32 +22,48 @@ public class GeneticAlgorithm {
         this.rand = new Random(seed);
     }
 
+    // Start the primary evolutionary cycle
     public double solve() {
+
+        // Create an initial diverse population of random chromosomes
         Chromosome[] population = new Chromosome[populationSize];
         for (int i = 0; i < populationSize; i++) {
             population[i] = new Chromosome(instance.numItems, rand);
             population[i].calculateFitness(instance);
         }
 
+        // Evolution loop
         for (int g = 0; g < generations; g++) {
             Chromosome[] nextGeneration = new Chromosome[populationSize];
+
+            // ELITISM: Preservation of the absolute best individual.
             nextGeneration[0] = getBest(population).copy();
 
+            // Reproduction
             for (int i = 1; i < populationSize; i++) {
+
+                // Choose parents based on fitness competition
                 Chromosome parent1 = tournamentSelection(population);
                 Chromosome parent2 = tournamentSelection(population);
 
+                // Create offspring using single-point crossover
                 Chromosome child = crossover(parent1, parent2);
+
+                // Apply mutation to introduce new genetic material
                 mutate(child);
+
+                // Map the genes to the knapsack value
                 child.calculateFitness(instance);
 
                 nextGeneration[i] = child;
             }
+            // Generational replacement
             population = nextGeneration;
         }
         return getBest(population).fitness;
     }
 
+    // Selects an individual by comparing a random subset of the population
     private Chromosome tournamentSelection(Chromosome[] population) {
         Chromosome best = null;
         for (int i = 0; i < tournamentSize; i++) {
@@ -51,6 +75,7 @@ public class GeneticAlgorithm {
         return best;
     }
 
+    // Single-Point Crossover: Swaps genetic segments between two parents
     private Chromosome crossover(Chromosome p1, Chromosome p2) {
         Chromosome child = new Chromosome(instance.numItems, rand);
         int cutPoint = (instance.numItems <= 1) ? 0 : rand.nextInt(instance.numItems);
@@ -60,6 +85,7 @@ public class GeneticAlgorithm {
         return child;
     }
 
+    // Randomly alters genes to maintain population diversity
     private void mutate(Chromosome c) {
         for (int i = 0; i < c.genes.length; i++) {
             if (rand.nextDouble() < mutationRate) {
@@ -68,6 +94,7 @@ public class GeneticAlgorithm {
         }
     }
 
+    // Acceptance criterion
     private Chromosome getBest(Chromosome[] population) {
         Chromosome best = population[0];
         for (Chromosome c : population) {
@@ -119,6 +146,8 @@ class Chromosome {
             }
         }
 
+        // If the solution is invalid (overweight), randomly prune items until it satisfies the capacity constraint
+        // It highlights that you aren't just "killing" bad solutions, but "fixing" them
         while (totalWeight > instance.capacity) {
             int dropIndex = rand.nextInt(genes.length);
             if (genes[dropIndex] == 1) {
