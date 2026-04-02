@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class FileParser {
@@ -11,17 +12,29 @@ public class FileParser {
         try {
             File file = new File(filename);
             Scanner scanner = new Scanner(file);
-            scanner.useDelimiter("\\s+");
+
+            // It tells the scanner: "Ignore my computer's settings, use DOTS for decimals."
+            scanner.useLocale(java.util.Locale.US);
 
             this.items = new ArrayList<>();
 
-            if (scanner.hasNextInt()) this.numItems = scanner.nextInt();
-            if (scanner.hasNextInt()) this.capacity = scanner.nextInt();
+            // Read the first two values in a File (Number of Items and Capacity)
+            if (scanner.hasNext())
+            {
+                this.numItems = (int) scanner.nextDouble();
+            }
+            if (scanner.hasNext())
+            {
+                this.capacity = (int) scanner.nextDouble();
+            }
 
-            while (scanner.hasNextInt()) {
-                int val = scanner.nextInt();
-                if (scanner.hasNextInt()) {
-                    int weight = scanner.nextInt();
+            // Read the Values and Weights
+            while (scanner.hasNext()) {
+                double val = scanner.nextDouble();
+
+                if (scanner.hasNext()) {
+                    double weight = scanner.nextDouble();
+
                     // Matches Item(weight, value)
                     this.items.add(new Item(weight, val));
                 }

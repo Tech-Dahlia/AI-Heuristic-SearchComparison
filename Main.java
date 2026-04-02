@@ -75,6 +75,7 @@ public class Main {
 
                 System.out.printf("%-25s | %-10s | %-15d | %-15.4f | %-15.4f | %-15.6f\n",
                         fileName, "GA", seed, result, opt, runtime);
+                //System.out.println();
             }
 
             // Run Allen's ILS logic
