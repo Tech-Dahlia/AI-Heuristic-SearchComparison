@@ -4,8 +4,8 @@ import java.util.Random;
 public class GeneticAlgorithm {
     private ProblemInstance instance;
     private int populationSize = 100;
-    private int generations = 500;
-    private double mutationRate = 0.01;
+    private int generations = 1000;
+    private double mutationRate = 0.10;
     private int tournamentSize = 5;
     private Random rand;
 
